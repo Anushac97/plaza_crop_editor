@@ -37,6 +37,14 @@ class CroppyLocalizationsRo extends CroppyLocalizations {
   String get cupertinoSquareAspectRatioLabel => 'PĂTRAT';
 
   @override
+  String get circle => '';
+
+  @override
+  String get freeCrop => '';
+
+  @override
+  String get square => '';
+  @override
   String materialGetFlipLabel(LocalizationDirection direction) {
     return switch (direction) {
       LocalizationDirection.horizontal => 'Întoarce pe orizontală',

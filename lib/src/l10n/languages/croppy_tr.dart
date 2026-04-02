@@ -39,4 +39,14 @@ class CroppyLocalizationsTr extends CroppyLocalizations {
 
   @override
   String get saveLabel => 'Kaydet';
+
+  @override
+  String get circle => '';
+
+  @override
+  String get freeCrop => '';
+
+  @override
+  String get square => '';
 }
+

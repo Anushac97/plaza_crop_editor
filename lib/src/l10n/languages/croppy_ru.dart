@@ -39,4 +39,13 @@ class CroppyLocalizationsRu extends CroppyLocalizations {
 
   @override
   String get saveLabel => 'Сохранить';
+
+  @override
+  String get circle => '';
+
+  @override
+  String get freeCrop => '';
+
+  @override
+  String get square => '';
 }

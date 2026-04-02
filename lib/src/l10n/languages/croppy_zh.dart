@@ -39,4 +39,13 @@ class CroppyLocalizationsZh extends CroppyLocalizations {
 
   @override
   String get saveLabel => '保存';
+
+  @override
+  String get circle => '';
+
+  @override
+  String get freeCrop => '';
+
+  @override
+  String get square => '';
 }

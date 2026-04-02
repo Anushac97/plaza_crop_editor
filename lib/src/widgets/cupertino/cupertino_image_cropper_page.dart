@@ -428,6 +428,8 @@ class AspectRatioSelectionBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = CroppyLocalizations.of(context)!;
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -437,14 +439,14 @@ class AspectRatioSelectionBottomSheet extends StatelessWidget {
           children: <Widget>[
             // Aspect ratios
             _buildAspectRatioChip(
-                label: 'Free-Crop', ratio: null, context: context, iconData: Icons.crop_free),
+                label: l10n.freeCrop, ratio: null, context: context, iconData: Icons.crop_free),
             _buildAspectRatioChip(
-                label: 'Square',
+                label: l10n.square,
                 ratio: const CropAspectRatio(width: 1, height: 1),
                 context: context,
                 iconData: Icons.crop_square),
             _buildAspectRatioChip(
-                label: 'Circle',
+                label: l10n.circle,
                 ratio: null,
                 context: context,
                 iconData: Icons.circle_outlined,

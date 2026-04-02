@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 class MyCroppyLocalizationsDelegate
     extends LocalizationsDelegate<CroppyLocalizations> {
   @override
-  bool isSupported(Locale locale) =>
-      CroppyLocalizations.supportedLocales.contains(locale);
+  bool isSupported(Locale locale) => CroppyLocalizations.supportedLocales.any(
+        (supportedLocale) =>
+            supportedLocale.languageCode == locale.languageCode,
+      );
 
   @override
   Future<CroppyLocalizations> load(Locale locale) {
@@ -68,4 +70,13 @@ class CroppyLocalizationsPirateEn extends CroppyLocalizations {
 
   @override
   String get saveLabel => 'Save';
+
+  @override
+  String get circle => 'Circle';
+
+  @override
+  String get freeCrop => 'Free-Crop';
+
+  @override
+  String get square => 'Square';
 }

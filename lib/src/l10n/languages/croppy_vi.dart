@@ -40,4 +40,13 @@ class CroppyLocalizationsVi extends CroppyLocalizations {
 
   @override
   String get saveLabel => 'Xong';
+
+  @override
+  String get circle => '';
+
+  @override
+  String get freeCrop => '';
+
+  @override
+  String get square => '';
 }

@@ -42,7 +42,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Croppy Demo',
       scrollBehavior: ExampleScrollBehavior(),
+      supportedLocales: CroppyLocalizations.supportedLocales,
       localizationsDelegates: const [
+        CroppyLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

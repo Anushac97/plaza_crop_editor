@@ -22,8 +22,10 @@ import 'package:flutter/material.dart';
 class MyCroppyLocalizationsDelegate
     extends LocalizationsDelegate<CroppyLocalizations> {
   @override
-  bool isSupported(Locale locale) =>
-      CroppyLocalizations.supportedLocales.contains(locale);
+  bool isSupported(Locale locale) => CroppyLocalizations.supportedLocales.any(
+        (supportedLocale) =>
+            supportedLocale.languageCode == locale.languageCode,
+      );
 
   @override
   Future<CroppyLocalizations> load(Locale locale) {
@@ -47,3 +49,17 @@ class CroppyLocalizationsPirateEn extends CroppyLocalizations {
 ```
 
 See `example/lib/localization_override_example.dart` for a full example.
+
+To make device language changes take effect, configure your app with both:
+
+```dart
+MaterialApp(
+  supportedLocales: CroppyLocalizations.supportedLocales,
+  localizationsDelegates: [
+    CroppyLocalizations.delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ],
+)
+```

@@ -2,6 +2,8 @@ import 'package:croppy/src/src.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
+import 'languages/croppy_ja.dart';
+
 enum LocalizationDirection { vertical, horizontal }
 
 abstract class CroppyLocalizations {
@@ -32,6 +34,7 @@ abstract class CroppyLocalizations {
     Locale('tr'),
     Locale('pl'),
     Locale('ro'),
+    Locale('ja'),
   ];
 
   /// Defaults to °
@@ -80,6 +83,15 @@ abstract class CroppyLocalizations {
 
   /// en: "SQUARE"
   String get cupertinoSquareAspectRatioLabel;
+
+  /// en: "SQUARE"
+  String get square;
+
+  /// en: "CIRCLE"
+  String get circle;
+
+  /// en: "Free Crop"
+  String get freeCrop;
 }
 
 class _CroppyLocalizationsDelegate
@@ -131,6 +143,8 @@ CroppyLocalizations lookupCroppyLocalizations(Locale locale) {
       return CroppyLocalizationsPl();
     case 'ro':
       return CroppyLocalizationsRo();
+    case 'ja':
+      return CroppyLocalizationsJa();
   }
 
   if (kDebugMode) {

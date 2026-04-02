@@ -39,4 +39,13 @@ class CroppyLocalizationsDe extends CroppyLocalizations {
 
   @override
   String get saveLabel => 'Speichern';
+
+  @override
+  String get circle => '';
+
+  @override
+  String get freeCrop => '';
+
+  @override
+  String get square => '';
 }

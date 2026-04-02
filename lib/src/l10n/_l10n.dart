@@ -7,6 +7,7 @@ export './languages/croppy_ru.dart';
 export './languages/croppy_vi.dart';
 export './languages/croppy_pt.dart';
 export './languages/croppy_he.dart';
+export './languages/croppy_ja.dart';
 export './languages/croppy_es.dart';
 export './languages/croppy_zh.dart';
 export './languages/croppy_tr.dart';

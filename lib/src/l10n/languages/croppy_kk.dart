@@ -39,4 +39,13 @@ class CroppyLocalizationsKk extends CroppyLocalizations {
 
   @override
   String get saveLabel => 'Сақтау';
+
+  @override
+  String get circle => '';
+
+  @override
+  String get freeCrop => '';
+
+  @override
+  String get square => '';
 }
