@@ -487,12 +487,12 @@ class AspectRatioSelectionBottomSheet extends StatelessWidget {
                 context: context,
                 iconData: Icons.dangerous_outlined,
                 shapeType: CropShapeType.heart),
-            _buildAspectRatioChip(
+            /*_buildAspectRatioChip(
                 label: 'ComHeart',
                 ratio: null,
                 context: context,
                 iconData: Icons.dangerous_outlined,
-                shapeType: CropShapeType.compressedHeart),
+                shapeType: CropShapeType.compressedHeart),*/
             _buildAspectRatioChip(
                 label: 'Triangle',
                 ratio: null,
