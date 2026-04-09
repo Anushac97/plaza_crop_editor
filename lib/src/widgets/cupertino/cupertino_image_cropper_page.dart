@@ -450,7 +450,67 @@ class AspectRatioSelectionBottomSheet extends StatelessWidget {
                 ratio: null,
                 context: context,
                 iconData: Icons.circle_outlined,
-                isEllipse: CropShapeType.ellipse),
+                shapeType: CropShapeType.ellipse),
+            _buildAspectRatioChip(
+                label: 'Corner',
+                ratio: null,
+                context: context,
+                iconData: Icons.rounded_corner,
+                shapeType: CropShapeType.roundedLeftTopRightBottom),
+            _buildAspectRatioChip(
+                label: 'Badge',
+                ratio: null,
+                context: context,
+                iconData: Icons.verified_outlined,
+                shapeType: CropShapeType.starburst),
+            _buildAspectRatioChip(
+                label: 'Arch',
+                ratio: null,
+                context: context,
+                iconData: Icons.sensor_door_outlined,
+                shapeType: CropShapeType.arch),
+            _buildAspectRatioChip(
+                label: 'Diamond',
+                ratio: null,
+                context: context,
+                iconData: Icons.diamond_outlined,
+                shapeType: CropShapeType.diamond),
+            _buildAspectRatioChip(
+                label: 'ParalleloGm',
+                ratio: null,
+                context: context,
+                iconData: Icons.dangerous_outlined,
+                shapeType: CropShapeType.parallelogram),
+            _buildAspectRatioChip(
+                label: 'Heart',
+                ratio: null,
+                context: context,
+                iconData: Icons.dangerous_outlined,
+                shapeType: CropShapeType.heart),
+            _buildAspectRatioChip(
+                label: 'ComHeart',
+                ratio: null,
+                context: context,
+                iconData: Icons.dangerous_outlined,
+                shapeType: CropShapeType.compressedHeart),
+            _buildAspectRatioChip(
+                label: 'Triangle',
+                ratio: null,
+                context: context,
+                iconData: Icons.dangerous_outlined,
+                shapeType: CropShapeType.triangle),
+            _buildAspectRatioChip(
+                label: 'Pentagon',
+                ratio: null,
+                context: context,
+                iconData: Icons.dangerous_outlined,
+                shapeType: CropShapeType.pentagon),
+            _buildAspectRatioChip(
+                label: 'Rounded Square',
+                ratio: null,
+                context: context,
+                iconData: Icons.dangerous_outlined,
+                shapeType: CropShapeType.roundedSquare),
             _buildAspectRatioChip(
                 label: '3:4', ratio: const CropAspectRatio(width: 3, height: 4), context: context),
             _buildAspectRatioChip(
@@ -474,7 +534,7 @@ class AspectRatioSelectionBottomSheet extends StatelessWidget {
   Widget _buildAspectRatioChip(
       {required String label,
       IconData? iconData,
-      CropShapeType isEllipse = CropShapeType.aabb,
+      CropShapeType shapeType = CropShapeType.aabb,
       CropAspectRatio? ratio,
       required BuildContext context}) {
     return ActionChip(
@@ -490,7 +550,7 @@ class AspectRatioSelectionBottomSheet extends StatelessWidget {
       //       ),
       onPressed: () {
         Navigator.pop(context);
-        onCircleTap(ratio, isEllipse);
+        onCircleTap(ratio, shapeType);
       },
     );
   }

@@ -27,6 +27,7 @@ class DefaultCupertinoCroppableImageController extends StatefulWidget {
   final Widget Function(BuildContext context, CupertinoCroppableImageController controller,
       DefaultCupertinoCroppableImageControllerState state) builder;
 
+
   @override
   State<DefaultCupertinoCroppableImageController> createState() =>
       DefaultCupertinoCroppableImageControllerState();
@@ -102,8 +103,29 @@ class DefaultCupertinoCroppableImageControllerState
       CroppableImageData? initialDatas,
       bool isFreeCrop = false}) async {
     late CroppableImageData initialData;
-    var tempCrop =
-        (type == CropShapeType.aabb || type == null) ? aabbCropShapeFn : circleCropShapeFn;
+    final CropShapeFn tempCrop = type == CropShapeType.ellipse
+        ? circleCropShapeFn
+        : type == CropShapeType.roundedLeftTopRightBottom
+            ? singleRoundedCornerCropShapeFn
+            : type == CropShapeType.starburst
+                ? starburstCropShapeFn
+                : type == CropShapeType.arch
+                    ? archCropShapeFn
+                    :  type == CropShapeType.diamond
+                    ? diamondCropShapeFn
+                    : type == CropShapeType.parallelogram
+                    ? parallelogramCropShapeFn
+                    : type == CropShapeType.heart
+                    ? heartCropShapeFn
+                    : type == CropShapeType.compressedHeart
+                    ? compressedHeartCropShapeFn
+                    : type == CropShapeType.pentagon
+                    ? pentagonCropShapeFn
+                    : type == CropShapeType.roundedSquare
+                    ? roundedSquareCropShapeFn
+                    : type == CropShapeType.triangle
+                    ? triangleCropShapeFn
+                    : aabbCropShapeFn;
     if (initialDatas != null && !fromCrop) {
       initialData = initialDatas!.copyWith();
     } else {
@@ -146,28 +168,154 @@ class DefaultCupertinoCroppableImageControllerState
   }
 
   changeAspectRatio({CropAspectRatio? ratio, CropShapeType? shapeType}) {
-    bool isElipse = shapeType == CropShapeType.ellipse;
-    if (_controller!.cropShapeFn != circleCropShapeFn && (isElipse)) {
-      prepareController(type: CropShapeType.ellipse, fromCrop: true);
+    final bool isEllipse = shapeType == CropShapeType.ellipse;
+    final bool isRoundedCorner = shapeType == CropShapeType.roundedLeftTopRightBottom;
+    final bool isStarburst = shapeType == CropShapeType.starburst;
+    final bool isArch = shapeType == CropShapeType.arch;
+    final bool isDiamond = shapeType == CropShapeType.diamond;
+    final bool isParallelogram = shapeType == CropShapeType.parallelogram;
+    final bool isHeart = shapeType == CropShapeType.heart;
+    final bool isCompHeart = shapeType == CropShapeType.compressedHeart;
+    final bool isTriangle = shapeType == CropShapeType.triangle;
+    final bool isRoundedSquare = shapeType == CropShapeType.roundedSquare;
+    final bool isPentagon = shapeType == CropShapeType.pentagon;
 
-      Future.delayed(const Duration(milliseconds: 100)).then((_) {
-        (_controller as AspectRatioMixin).currentAspectRatio = CropAspectRatio(width: 1, height: 1);
+    final bool currentIsCircle = _controller!.cropShapeFn == circleCropShapeFn;
+    final bool currentIsRoundedCorner =
+        _controller!.cropShapeFn == singleRoundedCornerCropShapeFn;
+    final bool currentIsStarburst = _controller!.cropShapeFn == starburstCropShapeFn;
+    final bool currentIsArch = _controller!.cropShapeFn == archCropShapeFn;
+    final bool currentIsDiamond = _controller!.cropShapeFn == diamondCropShapeFn;
+    final bool currentIsParallelogram = _controller!.cropShapeFn == parallelogramCropShapeFn;
+    final bool currentIsHeart = _controller!.cropShapeFn == heartCropShapeFn;
+    final bool currentIsCompHeart = _controller!.cropShapeFn == compressedHeartCropShapeFn;
+    final bool currentIsTriangle = _controller!.cropShapeFn == triangleCropShapeFn;
+    final bool currentIsPentagon = _controller!.cropShapeFn == pentagonCropShapeFn;
+    final bool currentIsRoundedSquare = _controller!.cropShapeFn == roundedSquareCropShapeFn;
+    // Any non-rectangular shape currently active.
+    final bool currentIsNonAabb =
+        currentIsCircle || currentIsRoundedCorner || currentIsStarburst || currentIsArch || currentIsDiamond;
+
+    // ── Entering starburst ──────────────────────────────────────────────────
+    if (isStarburst && !currentIsStarburst) {
+      prepareController(type: CropShapeType.starburst, fromCrop: true).then((_) {
+        Future.delayed(const Duration(milliseconds: 100)).then((_) {
+          (_controller as AspectRatioMixin).currentAspectRatio =
+              const CropAspectRatio(width: 1, height: 1);
+        });
       });
-    } else if (_controller!.cropShapeFn == circleCropShapeFn && (!isElipse)) {
-      prepareController(type: CropShapeType.aabb, fromCrop: true, isFreeCrop: ratio == null)
-          .then((localController) {
+
+    // ── Entering arch ───────────────────────────────────────────────────────
+    } else if (isArch && !currentIsArch) {
+      prepareController(type: CropShapeType.arch, fromCrop: true).then((_) {
+        Future.delayed(const Duration(milliseconds: 100)).then((_) {
+          (_controller as AspectRatioMixin).currentAspectRatio =
+              const CropAspectRatio(width: 1, height: 1);
+        });
+      });
+
+    // ── Entering rounded-corner shape ───────────────────────────────────────
+    } else if (isRoundedCorner && !currentIsRoundedCorner) {
+      prepareController(type: CropShapeType.roundedLeftTopRightBottom, fromCrop: true).then((_) {
+        Future.delayed(const Duration(milliseconds: 100)).then((_) {
+          (_controller as AspectRatioMixin).currentAspectRatio =
+              const CropAspectRatio(width: 1, height: 1);
+        });
+      });
+
+    // ── Entering ellipse (circle) ───────────────────────────────────────────
+    } else if (isEllipse && !currentIsCircle) {
+      prepareController(type: CropShapeType.ellipse, fromCrop: true).then((_) {
+        Future.delayed(const Duration(milliseconds: 100)).then((_) {
+          (_controller as AspectRatioMixin).currentAspectRatio =
+              const CropAspectRatio(width: 1, height: 1);
+        });
+      });
+
+    //  ── Entering Diamond  ───────────────────────────────────────────
+    } else if (isDiamond && !currentIsDiamond) {
+      prepareController(type: CropShapeType.diamond, fromCrop: true).then((_) {
+        Future.delayed(const Duration(milliseconds: 100)).then((_) {
+          (_controller as AspectRatioMixin).currentAspectRatio =
+              const CropAspectRatio(width: 1, height: 1);
+        });
+      });
+
+      //  ── Entering Parallelogram  ───────────────────────────────────────────
+    } else if (isParallelogram && !currentIsParallelogram) {
+      prepareController(type: CropShapeType.parallelogram, fromCrop: true).then((_) {
+        Future.delayed(const Duration(milliseconds: 100)).then((_) {
+          (_controller as AspectRatioMixin).currentAspectRatio =
+              const CropAspectRatio(width: 1, height: 1);
+        });
+      });
+
+    // ── Leaving any non-aabb shape → aabb ──────────────────────────────────
+    }else if (isCompHeart && !currentIsCompHeart) {
+      prepareController(type: CropShapeType.compressedHeart, fromCrop: true).then((_) {
+        Future.delayed(const Duration(milliseconds: 100)).then((_) {
+          (_controller as AspectRatioMixin).currentAspectRatio =
+              const CropAspectRatio(width: 1, height: 1);
+        });
+      });
+
+    // ── Leaving any non-aabb shape → aabb ──────────────────────────────────
+    } else if (isHeart && !currentIsHeart) {
+      prepareController(type: CropShapeType.heart, fromCrop: true).then((_) {
+        Future.delayed(const Duration(milliseconds: 100)).then((_) {
+          (_controller as AspectRatioMixin).currentAspectRatio =
+              const CropAspectRatio(width: 1, height: 1);
+        });
+      });
+
+    // ── Leaving any non-aabb shape → aabb ──────────────────────────────────
+    }else if (isPentagon && !currentIsPentagon) {
+      prepareController(type: CropShapeType.pentagon, fromCrop: true).then((_) {
+        Future.delayed(const Duration(milliseconds: 100)).then((_) {
+          (_controller as AspectRatioMixin).currentAspectRatio =
+              const CropAspectRatio(width: 1, height: 1);
+        });
+      });
+
+    // ── Leaving any non-aabb shape → aabb ──────────────────────────────────
+    }else if (isRoundedSquare && !currentIsRoundedSquare) {
+      prepareController(type: CropShapeType.roundedSquare, fromCrop: true).then((_) {
+        Future.delayed(const Duration(milliseconds: 100)).then((_) {
+          (_controller as AspectRatioMixin).currentAspectRatio =
+              const CropAspectRatio(width: 1, height: 1);
+        });
+      });
+
+    // ── Leaving any non-aabb shape → aabb ──────────────────────────────────
+    }else if (isTriangle && !currentIsTriangle) {
+      prepareController(type: CropShapeType.triangle, fromCrop: true).then((_) {
+        Future.delayed(const Duration(milliseconds: 100)).then((_) {
+          (_controller as AspectRatioMixin).currentAspectRatio =
+              const CropAspectRatio(width: 1, height: 1);
+        });
+      });
+
+    // ── Leaving any non-aabb shape → aabb ──────────────────────────────────
+    } else if (currentIsNonAabb && !isEllipse && !isRoundedCorner && !isStarburst && !isArch) {
+      prepareController(
+        type: CropShapeType.aabb,
+        fromCrop: true,
+        isFreeCrop: ratio == null,
+      ).then((_) {
         if (ratio == null) {
           applyFreeCrop(ratio);
           return;
         }
         (_controller as AspectRatioMixin).currentAspectRatio = ratio;
       });
+
+    // ── Already on the right shape, just change the ratio ─────────────────
     } else {
       if (ratio == null) {
         applyFreeCrop(ratio);
         return;
       }
-      log("Ratio called ${ratio}");
+      log("Ratio called $ratio");
       (_controller as AspectRatioMixin).currentAspectRatio = ratio;
     }
     // centerCropCorrectly(_controller!);
@@ -190,7 +338,7 @@ class DefaultCupertinoCroppableImageControllerState
     double degrees, // -90 to +90
   ) {
     controller.onRotateByAngle(
-      angleRad: degrees,
+      angleDeg: degrees,
     );
   }
 
@@ -278,6 +426,36 @@ class DefaultCupertinoCroppableImageControllerState
     _updateUndoRedoNotifier();
   }
 
+  /// Returns the correct [CropShapeFn] for the given [CropShapeType].
+  CropShapeFn _cropShapeFnForType(CropShapeType type) {
+    switch (type) {
+      case CropShapeType.ellipse:
+        return circleCropShapeFn;
+      case CropShapeType.roundedLeftTopRightBottom:
+        return singleRoundedCornerCropShapeFn;
+      case CropShapeType.starburst:
+        return starburstCropShapeFn;
+      case CropShapeType.arch:
+        return archCropShapeFn;
+      case CropShapeType.diamond:
+        return diamondCropShapeFn;
+      case CropShapeType.parallelogram:
+        return parallelogramCropShapeFn;
+      case CropShapeType.heart:
+        return heartCropShapeFn;
+      case CropShapeType.compressedHeart:
+        return compressedHeartCropShapeFn;
+      case CropShapeType.triangle:
+        return triangleCropShapeFn;
+      case CropShapeType.pentagon:
+        return pentagonCropShapeFn;
+      case CropShapeType.roundedSquare:
+        return roundedSquareCropShapeFn;
+      default:
+        return aabbCropShapeFn;
+    }
+  }
+
   void undo() {
     if (_undoStack.length <= 1) return;
 
@@ -292,22 +470,14 @@ class DefaultCupertinoCroppableImageControllerState
       vsync: this,
       imageProvider: widget.imageProvider,
       data: previous.data.copyWith(),
-      cropShapeFn: previous.data.cropShape.type == CropShapeType.ellipse
-          ? circleCropShapeFn
-          : aabbCropShapeFn,
+      cropShapeFn: _cropShapeFnForType(previous.data.cropShape.type),
       postProcessFn: widget.postProcessFn,
-      // allowedAspectRatios: widget.allowedAspectRatios,
       enabledTransformations: widget.enabledTransformations ?? Transformation.values,
     );
 
     _restoreFromUndoNode(previous);
     initialiseListener(_controller!);
     _updateUndoRedoNotifier();
-    // if (isLastUndo) {
-    //   Future.delayed(Duration(milliseconds: 300)).then((_) {
-    //     callDefault();
-    //   });
-    // }
     setState(() {});
   }
 
@@ -340,8 +510,7 @@ class DefaultCupertinoCroppableImageControllerState
       imageProvider: widget.imageProvider,
       postProcessFn: widget.postProcessFn,
       data: next.data.copyWith(),
-      cropShapeFn:
-          next.data.cropShape.type == CropShapeType.ellipse ? circleCropShapeFn : aabbCropShapeFn,
+      cropShapeFn: _cropShapeFnForType(next.data.cropShape.type),
       enabledTransformations: widget.enabledTransformations ?? Transformation.values,
     );
     _restoreFromUndoNode(next);
