@@ -338,7 +338,7 @@ class DefaultCupertinoCroppableImageControllerState
     double degrees, // -90 to +90
   ) {
     controller.onRotateByAngle(
-      angleDeg: degrees,
+      angleRad: degrees,
     );
   }
 
