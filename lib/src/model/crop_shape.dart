@@ -19,6 +19,8 @@ enum CropShapeType {
   compressedHeart,
   triangle,
   pentagon,
+  flower,
+  capsule,
   custom
 }
 
@@ -81,6 +83,8 @@ class CropShape extends Equatable {
         type == CropShapeType.roundedSquare ||
         type == CropShapeType.compressedHeart ||
         type == CropShapeType.pentagon ||
+        type == CropShapeType.capsule ||
+        type == CropShapeType.flower ||
         type == CropShapeType.triangle);
     return path as vg.Path;
   }
@@ -359,19 +363,22 @@ CropShape compressedHeartCropShapeFn(vg.PathBuilder builder, Size size) {
   final vgPath = builder
       .moveTo(w * 0.5, h * 0.35) // slightly lower top (flatter)
 
-  // Left side (wider + flatter)
+      // Left side (wider + flatter)
       .cubicTo(
-    w * 0.05, h * 0.10,   // push far left
-    w * 0.0,  h * 0.55,   // mid curve
-    w * 0.5,  h * 0.80,   // bottom (reduced height)
-  )
+        w * 0.05, h * 0.10, // push far left
+        w * 0.0, h * 0.55, // mid curve
+        w * 0.5, h * 0.80, // bottom (reduced height)
+      )
 
-  // Right side (mirror)
+      // Right side (mirror)
       .cubicTo(
-    w * 1.0,  h * 0.55,
-    w * 0.95, h * 0.10,
-    w * 0.5,  h * 0.35,
-  )
+        w * 1.0,
+        h * 0.55,
+        w * 0.95,
+        h * 0.10,
+        w * 0.5,
+        h * 0.35,
+      )
       .close()
       .toPath();
 
@@ -476,6 +483,88 @@ CropShape roundedSquareCropShapeFn(vg.PathBuilder builder, Size size) {
 
   return CropShape(
     type: CropShapeType.roundedSquare,
+    path: path,
+    vgPath: path,
+  );
+}
+
+CropShape flowerShapeFn(vg.PathBuilder builder, Size size) {
+  final w = size.width;
+  final h = size.height;
+
+  final cx = w / 2;
+  final cy = h / 2;
+
+  final radius = math.min(w, h) / 2;
+  const int petals = 6;
+
+  for (int i = 0; i < petals; i++) {
+    final angle = (2 * math.pi * i) / petals;
+    final nextAngle = (2 * math.pi * (i + 1)) / petals;
+
+    final x1 = cx + radius * math.cos(angle);
+    final y1 = cy + radius * math.sin(angle);
+
+    final x2 = cx + radius * math.cos(nextAngle);
+    final y2 = cy + radius * math.sin(nextAngle);
+
+    final midAngle = (angle + nextAngle) / 2;
+
+    final cx1 = cx + radius * 1.2 * math.cos(midAngle);
+    final cy1 = cy + radius * 1.2 * math.sin(midAngle);
+
+    if (i == 0) {
+      builder.moveTo(x1, y1);
+    }
+
+    builder.cubicTo(
+      x1 + (cx1 - x1) * 0.55,
+      y1 + (cy1 - y1) * 0.55,
+      x2 + (cx1 - x2) * 0.55,
+      y2 + (cy1 - y2) * 0.55,
+      x2,
+      y2,
+    );
+  }
+
+  final path = builder.close().toPath();
+
+  return CropShape(
+    type: CropShapeType.custom,
+    path: path,
+    vgPath: path,
+  );
+}
+
+CropShape archCapsuleShapeFn(vg.PathBuilder builder, Size size) {
+  final w = size.width;
+  final h = size.height;
+
+  final r = w / 2; // 🔥 FIX: always half width
+  const k = 0.5522847498;
+
+  final path = builder
+      .moveTo(0, r)
+
+      // 🔵 TOP LEFT ARC
+      .cubicTo(0, r * (1 - k), r * (1 - k), 0, r, 0)
+
+      // 🔵 TOP RIGHT ARC
+      .cubicTo(r * (1 + k), 0, w, r * (1 - k), w, r)
+
+      // ✅ RIGHT SIDE
+      .lineTo(w, h - r)
+
+      // 🔵 BOTTOM RIGHT ARC
+      .cubicTo(w, h - r * (1 - k), r * (1 + k), h, r, h)
+
+      // 🔵 BOTTOM LEFT ARC
+      .cubicTo(r * (1 - k), h, 0, h - r * (1 - k), 0, h - r)
+      .close()
+      .toPath();
+
+  return CropShape(
+    type: CropShapeType.arch,
     path: path,
     vgPath: path,
   );

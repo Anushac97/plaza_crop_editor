@@ -512,6 +512,18 @@ class AspectRatioSelectionBottomSheet extends StatelessWidget {
                 iconData: Icons.dangerous_outlined,
                 shapeType: CropShapeType.roundedSquare),
             _buildAspectRatioChip(
+                label: 'Capsule',
+                ratio: null,
+                context: context,
+                iconData: Icons.dangerous_outlined,
+                shapeType: CropShapeType.capsule),
+            _buildAspectRatioChip(
+                label: 'Flower',
+                ratio: null,
+                context: context,
+                iconData: Icons.dangerous_outlined,
+                shapeType: CropShapeType.flower),
+            _buildAspectRatioChip(
                 label: '3:4', ratio: const CropAspectRatio(width: 3, height: 4), context: context),
             _buildAspectRatioChip(
                 label: '4:3', ratio: const CropAspectRatio(width: 4, height: 3), context: context),

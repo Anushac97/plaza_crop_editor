@@ -125,6 +125,10 @@ class DefaultCupertinoCroppableImageControllerState
                     ? roundedSquareCropShapeFn
                     : type == CropShapeType.triangle
                     ? triangleCropShapeFn
+                    : type == CropShapeType.capsule
+                    ? archCapsuleShapeFn
+                    : type == CropShapeType.flower
+                    ? flowerShapeFn
                     : aabbCropShapeFn;
     if (initialDatas != null && !fromCrop) {
       initialData = initialDatas!.copyWith();
@@ -179,6 +183,8 @@ class DefaultCupertinoCroppableImageControllerState
     final bool isTriangle = shapeType == CropShapeType.triangle;
     final bool isRoundedSquare = shapeType == CropShapeType.roundedSquare;
     final bool isPentagon = shapeType == CropShapeType.pentagon;
+    final bool isFlower = shapeType == CropShapeType.flower;
+    final bool isCapsule = shapeType == CropShapeType.capsule;
 
     final bool currentIsCircle = _controller!.cropShapeFn == circleCropShapeFn;
     final bool currentIsRoundedCorner =
@@ -192,6 +198,8 @@ class DefaultCupertinoCroppableImageControllerState
     final bool currentIsTriangle = _controller!.cropShapeFn == triangleCropShapeFn;
     final bool currentIsPentagon = _controller!.cropShapeFn == pentagonCropShapeFn;
     final bool currentIsRoundedSquare = _controller!.cropShapeFn == roundedSquareCropShapeFn;
+    final bool currentIsCapsule = _controller!.cropShapeFn == archCapsuleShapeFn;
+    final bool currentIsFlower = _controller!.cropShapeFn == flowerShapeFn;
     // Any non-rectangular shape currently active.
     final bool currentIsNonAabb =
         currentIsCircle || currentIsRoundedCorner || currentIsStarburst || currentIsArch || currentIsDiamond;
@@ -289,6 +297,24 @@ class DefaultCupertinoCroppableImageControllerState
     // ── Leaving any non-aabb shape → aabb ──────────────────────────────────
     }else if (isTriangle && !currentIsTriangle) {
       prepareController(type: CropShapeType.triangle, fromCrop: true).then((_) {
+        Future.delayed(const Duration(milliseconds: 100)).then((_) {
+          (_controller as AspectRatioMixin).currentAspectRatio =
+              const CropAspectRatio(width: 1, height: 1);
+        });
+      });
+
+    // ── Leaving any non-aabb shape → aabb ──────────────────────────────────
+    }else if (isCapsule && !currentIsCapsule) {
+      prepareController(type: CropShapeType.capsule, fromCrop: true).then((_) {
+        Future.delayed(const Duration(milliseconds: 100)).then((_) {
+          (_controller as AspectRatioMixin).currentAspectRatio =
+              const CropAspectRatio(width: 1, height: 2);
+        });
+      });
+
+    // ── Leaving any non-aabb shape → aabb ──────────────────────────────────
+    }else if (isFlower && !currentIsFlower) {
+      prepareController(type: CropShapeType.flower, fromCrop: true).then((_) {
         Future.delayed(const Duration(milliseconds: 100)).then((_) {
           (_controller as AspectRatioMixin).currentAspectRatio =
               const CropAspectRatio(width: 1, height: 1);
