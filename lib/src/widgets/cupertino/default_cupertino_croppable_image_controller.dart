@@ -202,7 +202,9 @@ class DefaultCupertinoCroppableImageControllerState
     final bool currentIsFlower = _controller!.cropShapeFn == flowerShapeFn;
     // Any non-rectangular shape currently active.
     final bool currentIsNonAabb =
-        currentIsCircle || currentIsRoundedCorner || currentIsStarburst || currentIsArch || currentIsDiamond;
+        _controller!.cropShapeFn != aabbCropShapeFn ||
+        _controller!.data.cropShape.type != CropShapeType.aabb;
+    final bool targetIsNonAabb = shapeType != null && shapeType != CropShapeType.aabb;
 
     // ── Entering starburst ──────────────────────────────────────────────────
     if (isStarburst && !currentIsStarburst) {
@@ -322,7 +324,7 @@ class DefaultCupertinoCroppableImageControllerState
       });
 
     // ── Leaving any non-aabb shape → aabb ──────────────────────────────────
-    } else if (currentIsNonAabb && !isEllipse && !isRoundedCorner && !isStarburst && !isArch) {
+    } else if (currentIsNonAabb && !targetIsNonAabb) {
       prepareController(
         type: CropShapeType.aabb,
         fromCrop: true,

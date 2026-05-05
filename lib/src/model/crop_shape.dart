@@ -50,7 +50,8 @@ class CropShape extends Equatable {
   CropShape.ellipse(Ellipse2 ellipse)
       : type = CropShapeType.ellipse,
         path = ellipse,
-        vgPath = vg.globalPathBuilder.addOval(ellipse.boundingBox.rect).toPath();
+        vgPath =
+            vg.globalPathBuilder.addOval(ellipse.boundingBox.rect).toPath();
 
   const CropShape.custom(vg.Path customPath)
       : type = CropShapeType.custom,
@@ -111,7 +112,8 @@ class CropShape extends Equatable {
   }
 
   vg.Path getTransformedPath(Offset offset, double scale) {
-    final translationTransform = Matrix4.identity()..translate(offset.dx, offset.dy);
+    final translationTransform = Matrix4.identity()
+      ..translate(offset.dx, offset.dy);
     final scaleTransform = Matrix4.identity()..scale(scale);
 
     final transform = translationTransform * scaleTransform;
@@ -130,7 +132,12 @@ class CropShape extends Equatable {
       bounds = customPath.toUiPath().getBounds();
     }
 
-    final scale = size.shortestSide / bounds.shortestSide;
+    final scale = type == CropShapeType.heart
+        ? math.min(
+            size.width / (bounds.width / 0.9),
+            size.height / bounds.bottom,
+          )
+        : size.shortestSide / bounds.shortestSide;
     return getTransformedPath(Offset.zero, scale);
   }
 
@@ -305,7 +312,8 @@ CropShape archCropShapeFn(vg.PathBuilder builder, Size size) {
   final vgPath = builder
       .moveTo(0, archHeight)
       .cubicTo(0, archHeight * (1 - k), r * (1 - k), 0, r, 0)
-      .cubicTo(r * (1 + k), 0, size.width, archHeight * (1 - k), size.width, archHeight)
+      .cubicTo(r * (1 + k), 0, size.width, archHeight * (1 - k), size.width,
+          archHeight)
       .lineTo(size.width, totalHeight)
       .lineTo(0, totalHeight)
       .close()
@@ -432,9 +440,11 @@ CropShape heartCropShapeFn(vg.PathBuilder builder, Size size) {
   final h = size.height;
 
   final path = builder
-      .moveTo(w / 2, h * 0.35)
-      .cubicTo(0, 0, 0, h * 0.7, w / 2, h)
-      .cubicTo(w, h * 0.7, w, 0, w / 2, h * 0.35)
+      .moveTo(w * 0.5, h * 0.28)
+      .cubicTo(w * 0.35, h * 0.05, w * 0.05, h * 0.15, w * 0.05, h * 0.4)
+      .cubicTo(w * 0.05, h * 0.7, w * 0.3, h * 0.9, w * 0.5, h)
+      .cubicTo(w * 0.7, h * 0.9, w * 0.95, h * 0.7, w * 0.95, h * 0.4)
+      .cubicTo(w * 0.95, h * 0.15, w * 0.65, h * 0.05, w * 0.5, h * 0.28)
       .close()
       .toPath();
 
@@ -465,7 +475,8 @@ CropShape roundedSquareCropShapeFn(vg.PathBuilder builder, Size size) {
       .lineTo(side, side - r)
 
       // Bottom-right corner
-      .cubicTo(side, side - r * (1 - k), side - r * (1 - k), side, side - r, side)
+      .cubicTo(
+          side, side - r * (1 - k), side - r * (1 - k), side, side - r, side)
 
       // Bottom edge
       .lineTo(r, side)

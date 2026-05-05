@@ -163,12 +163,34 @@ abstract class BaseCroppableImageController extends ChangeNotifier {
   }
 
   Rect getNormalizedRect(CroppableImageData data) {
+    final cropShapePolygon = data.cropShape.polygon;
     final normalizedAabb = FitPolygonInQuadSolver.solve(
-      data.cropShape.polygon.shift(data.cropRect.topLeft.vector2),
+      cropShapePolygon.shift(data.cropRect.topLeft.vector2),
       data.transformedImageQuad,
     );
 
-    return normalizedAabb.rect;
+    if (data.cropShape.type != CropShapeType.heart) {
+      return normalizedAabb.rect;
+    }
+
+    final localBounds = cropShapePolygon.boundingBox.rect;
+    final normalizedShapeRect = normalizedAabb.rect;
+
+    if (localBounds.isEmpty || normalizedShapeRect.isEmpty) {
+      return normalizedShapeRect;
+    }
+
+    final scaleX = normalizedShapeRect.width / localBounds.width;
+    final scaleY = normalizedShapeRect.height / localBounds.height;
+
+    return Rect.fromLTRB(
+      normalizedShapeRect.left - localBounds.left * scaleX,
+      normalizedShapeRect.top - localBounds.top * scaleY,
+      normalizedShapeRect.right +
+          (data.cropRect.width - localBounds.right) * scaleX,
+      normalizedShapeRect.bottom +
+          (data.cropRect.height - localBounds.bottom) * scaleY,
+    );
   }
 
   @protected
